@@ -21,6 +21,7 @@
             /* grid-auto-columns: 25vw; */
             width: 25vw;
         }
+
     </style>
 </head>
 <body>
