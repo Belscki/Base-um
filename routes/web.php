@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\PaginaMainController;
 use App\Http\Middleware\checkIsLogged;
 use App\Http\Middleware\checkIsNotLogged;
 use Illuminate\Support\Facades\Route;
@@ -14,7 +15,7 @@ Route::middleware([checkIsNotLogged::class])->group(function () {
 
 // App routes - user logged
 Route::middleware([checkIsLogged::class])->group(function () {
-    Route::get('/', [MainController::class, 'index'])->name('home');
+    Route::get('/home', [MainController::class, 'index'])->name('home');
     Route::get('/newNote', [MainController::class, 'newNote'])->name('newnote');
     Route::post('/newNoteSubmit', [MainController::class, 'newNoteSubmit'])->name('newNoteSubmit');
 
@@ -28,3 +29,6 @@ Route::middleware([checkIsLogged::class])->group(function () {
 
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });
+
+//
+Route::get('/',[PaginaMainController::class, 'mainpage'])->name('mainpage');
