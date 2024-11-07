@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>GERAL</title>
+    <title>SQUADS</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
@@ -109,12 +109,12 @@
         }
 
         .info-card {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            /* display: grid;
+            grid-template-columns: 1fr 1fr; */
             background-color: #FFF;
-            padding: 20px;
+            /* padding: ; */
             /* border-radius: 10px; */
-            width: 25vw;
+            width: 15vw;
             height: auto;
             text-align: center;
             align-items: center;
@@ -264,6 +264,7 @@
                 justify-content: space-between;
                 padding: 20px 0;
             }
+
             .info-card {
                 display: flex;
                 flex-direction: column;
@@ -302,78 +303,27 @@
 
     <div class="main-content" id="main-content">
         <div class="info-cards-container" id="info-cards-container">
-            <div>
-            </div>
-
-            <div class="info-card">
-                <div>
-                    <h2>Custo Total</h2>
-                    <p class="negative">Inserir valor via Fluxo</p>
+            <a href="{{route('squadpage')}}">
+                <div class="info-card">
+                    <h1>Voltar</h1>
                 </div>
-                <div class="info-card-chart">
-                    <canvas id="CanvaCustoTotal"></canvas>
-                </div>
-            </div>
-
-            <div class="info-card">
-                <div>
-                    <h2>Imposto</h2>
-                    <p class="negative">Inserir valor via Fluxo</p>
-                </div>
-                <div class="info-card-chart">
-                    <canvas id="CanvaImposto"></canvas>
-                </div>
-            </div>
-
-            <div></div>
-        </div>
-
-        @foreach ($funcionarios as $funcionario)
-            <li>{{$funcionario->nome}}</li>
-        @endforeach
-
-        <div class="sales-chart-container" id="sales-chart-container">
-            <div class="sales-line-chart">
-                <h2>CUSTO TOTAL MES</h2>
-                <canvas id="CanvaCustoTotalMes"></canvas>
-            </div>
+            </a>
         </div>
 
         <div class="info-cards-container" id="info-cards-container">
-            <div></div>
-
             <div class="info-card">
-                <div>
-                    <h2>Receita</h2>
-                    <p class="positive">Inserir valor via Fluxo</p>
-                </div>
-                <div class="info-card-chart">
-                    <canvas id="CanvaReceitaTotal"></canvas>
-                </div>
-            </div>
-
-            <div class="info-card">
-                <div>
-                    <h2>Receita X Custo Geral</h2>
-                    <p class="negative">Inserir valor via Fluxo</p>
-                </div>
-                <div class="info-card-chart">
-                    <canvas id="CanvaReceitaCustoGeral"></canvas>
-                </div>
-            </div>
-
-            <div></div>
-        </div>
-
-        <div class="sales-chart-container" id="sales-chart-container">
-            <div class="sales-line-chart">
-                <h2>Receita X Custo Geral (Mes)</h2>
-                <canvas id="CanvaReceitaCustoMes"></canvas>
+                <h1>Edição De SQUAD pendente</h1>
             </div>
         </div>
     </div>
+
 </body>
 <script>
+    //Atualiza a pagina ao Mudar a Resolução
+    window.addEventListener('resize', function () {
+        location.reload(); // Isso recarrega a página (simula o F5)
+    });
+
     let navVisible = true;
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -399,166 +349,6 @@
         navbar.addEventListener('mouseleave', toggleNav);
     });
 
-
-    //Custo Total Mes
-    const CustoTotalMes = document.getElementById('CanvaCustoTotalMes').getContext('2d');
-    const CanvaCustoTotalMes = new Chart(CustoTotalMes, {
-        type: 'bar',
-        data: {
-            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
-            ,
-            datasets: [{
-                label: 'Custos/Mes',
-                data: [800, 800, 1400, 600, 1300, 1000, 1000, 700, 1000, 400, 600, 300],
-                backgroundColor: '#11A66C'
-            }]
-        }
-    });
-
-    //CanvaReceitaCustoGeral
-    var windowWidth = window.innerWidth;
-
-    if (windowWidth >= 1320) {
-        const CustoReceita2 = document.getElementById('CanvaReceitaCustoGeral').getContext('2d');
-        const CanvaReceitaCustoGeral = new Chart(CustoReceita2, {
-            type: 'bar',
-            data: {
-                labels: ['Receita X Custo'],
-                datasets: [{
-                    label: 'Receita',
-                    data: [12000],
-                    backgroundColor: '#11A66C'
-                }, {
-                    label: 'Custo',
-                    data: [{{ $custoTotal }}],
-                    backgroundColor: '#FF2C2C'
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,  // Não começar no zero
-                        ticks: {
-                            stepSize: 1000, // Define o intervalo entre as linhas (por exemplo, cada 1000 unidades)
-                        }
-                    }
-                }
-            }
-        });
-    } else {
-        const CustoReceita2 = document.getElementById('CanvaReceitaCustoGeral').getContext('2d');
-        const CanvaReceitaCustoGeral = new Chart(CustoReceita2, {
-            type: 'doughnut',
-            data: {
-                labels: ['Receita', 'Custo'],
-                datasets: [{
-                    data: [12000, 10000],
-                    backgroundColor: ['#11A66C', '#FF2C2C']
-                }]
-            },
-            options: {
-                responsive: true,
-            }
-        });
-    }
-
-    //Custo Total
-    const CanvaCusto = document.getElementById('CanvaCustoTotal').getContext('2d');
-    const CanvaCustoTotal = new Chart(CanvaCusto, {
-        type: 'doughnut',
-        data: {
-            labels: ['Score', 'Global'],
-            datasets: [{
-                data: [7000, 3000],
-                backgroundColor: ['#11A66C', '#FFB400']
-            }]
-        },
-        options: {
-            legend: {
-                display: false
-            },
-            tooltips: {
-                enabled: false
-            },
-        }
-    });
-
-    //Receita Total
-    const CanvaReceita = document.getElementById('CanvaReceitaTotal').getContext('2d');
-    const CanvaReceitaTotal = new Chart(CanvaReceita, {
-        type: 'doughnut',
-        data: {
-            labels: ['Score', 'Global'],
-            datasets: [{
-                data: [7000, 3000],
-                backgroundColor: ['#11A66C', '#FFB400'
-                ]
-            }]
-        },
-        options: {
-            legend: {
-                display: false
-            },
-            tooltips: {
-                enabled: false
-            },
-        }
-    });
-
-    //Imposto
-    const CanvaImposto = document.getElementById('CanvaImposto').getContext('2d');
-    const CanvaImpostoTotal = new Chart(CanvaImposto, {
-        type: 'doughnut',
-        data: {
-            labels: ['Custo Total', 'Imposto'],
-            datasets: [{
-                data: [9000, 1000],
-                backgroundColor: ['#11A66C', '#FF2C2C'
-                ]
-            }]
-        },
-        options: {
-            legend: {
-                display: false
-            },
-            tooltips: {
-                enabled: false
-            },
-            responsive: true
-        }
-    });
-
-    //Receita X Custo Mes
-    const CanvarReceitaCustoMensal = document.getElementById('CanvaReceitaCustoMes').getContext('2d');
-    const CanvaReceitaCustoMes = new Chart(CanvarReceitaCustoMensal, {
-        type: 'line',
-        data: {
-            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
-            ,
-            datasets: [{
-                label: 'Custos',
-                data: [800, 800, 1400, 600, 1300, 1000, 1000, 700, 1000, 400, 600, 300],
-                borderColor: 'rgba(255, 44, 44, 1)',
-                backgroundColor: 'rgba(255, 44, 44, 0.20)',
-                fill: true,
-                borderWidth: 1,
-            }, {
-                label: 'Receita',
-                data: [900, 900, 1500, 700, 1400, 1100, 900, 900, 1100, 500, 700, 400],
-                borderColor: 'rgba(35, 196, 134, 1)',
-                backgroundColor: 'rgba(35, 196, 134, 0.20)',
-                fill: true,
-                borderWidth: 1,
-            }]
-        }
-    });
-
-
-    //Atualiza a pagina ao Mudar a Resolução
-    window.addEventListener('resize', function () {
-        location.reload(); // Isso recarrega a página (simula o F5)
-    });
 </script>
 
 </html>
